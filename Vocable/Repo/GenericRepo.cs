@@ -9,20 +9,24 @@ namespace Vocable
     public class GenericRepo<T> : IRepo<T>, IEnumerable<T> where T : IContainId
     {
 
+        #region instance fields
         private List<T> _items;
+        #endregion
 
+        #region Constructor
         public GenericRepo()
         {
             _items = new List<T>();
         }
+        #endregion
 
-        public GenericRepo(List<T> items)
-        {
-            _items = items;
-        }
-
+        #region properties
         // Expose the internal list while keeping backing field consistent
         public List<T> Items { get => _items; set => _items = value ?? new List<T>(); }
+        #endregion
+
+
+
         public T Create(T item)
         {
             if (item == null) throw new ArgumentNullException(nameof(item));
@@ -36,6 +40,8 @@ namespace Vocable
             _items.Add(item);
             return item;
         }
+
+
 
         public List<T> ReadAll()
         {
