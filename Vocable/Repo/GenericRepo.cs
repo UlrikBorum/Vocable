@@ -18,6 +18,11 @@ namespace Vocable
         {
             _items = new List<T>();
         }
+
+        public GenericRepo(List<T> items)
+        {
+            _items = items;
+        }
         #endregion
 
         #region properties
