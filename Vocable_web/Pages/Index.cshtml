@@ -1,0 +1,185 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div class="container">
+    <h1>Adverb Quiz</h1>
+
+    <div id="start-screen">
+        <p>Press the button to start a 5-question quiz.</p>
+        <button id="start-btn">Start Game</button>
+    </div>
+
+    <div id="game-screen" style="display:none;">
+        <div>
+            <strong id="progress">Question 0 of 5</strong>
+        </div>
+
+        <div style="margin-top:1rem;">
+           
+            
+            <img id="question-image" src="" alt="question-image" style="max-width:200px;display:none;" />
+            <div id="question-text"></div>
+        </div> 
+
+        <div>
+            <label>Answer:</label>
+            <input id="answer-input" type="text" />
+            <button id="submit-answer">Submit</button>
+        </div>
+
+        <div style="margin-top:1rem;">
+            <span>Lives: </span><span id="lives">3</span>
+        </div>
+
+        <div style="margin-top:1rem;">
+            <div>
+                <div class="hint blocked" id="hint-english">English hint</div>
+            </div>
+            <div style="margin-top:0.5rem;">
+                <div class="hint blocked" id="hint-sentence">Example sentence</div>
+            </div>
+        </div>
+
+        <div style="margin-top:1rem;">
+            <div id="message" style="color:darkred;"></div>
+        </div>
+    </div>
+
+    <div id="end-screen" style="display:none; margin-top:1rem;">
+        <h3>Quiz finished</h3>
+        <div id="final-message"></div>
+        <button id="play-again">Play Again</button>
+    </div>
+</div>
+
+<style>
+    .hint {
+        padding:0.5rem;
+        border:1px solid #ccc;
+        width:100%;
+        max-width:600px;
+        cursor:pointer;
+    }
+    .blocked {
+        background:#000;
+        color:#000; /* blacked out */
+        user-select:none;
+    }
+</style>
+
+<script>
+    let questions = [];
+    let current = 0;
+    let lives = 3;
+    let correctCount = 0;
+
+    const startBtn = document.getElementById('start-btn');
+    const gameScreen = document.getElementById('game-screen');
+    const startScreen = document.getElementById('start-screen');
+    const endScreen = document.getElementById('end-screen');
+    const progress = document.getElementById('progress');
+    const questionText = document.getElementById('question-text');
+    const answerInput = document.getElementById('answer-input');
+    const submitBtn = document.getElementById('submit-answer');
+    const livesSpan = document.getElementById('lives');
+    const hintEng = document.getElementById('hint-english');
+    const hintSent = document.getElementById('hint-sentence');
+    const message = document.getElementById('message');
+    const finalMessage = document.getElementById('final-message');
+    const playAgain = document.getElementById('play-again');
+    const gameImage = document.getElementById('question-image');
+
+    startBtn.addEventListener('click', startGame);
+    submitBtn.addEventListener('click', submitAnswer);
+    hintEng.addEventListener('click', () => revealHint(hintEng));
+    hintSent.addEventListener('click', () => revealHint(hintSent));
+    playAgain.addEventListener('click', () => location.reload());
+
+    function startGame() {
+        fetch('?handler=Questions')
+            .then(r => r.json())
+            .then(data => {
+                questions = data;
+                startScreen.style.display = 'none';
+                gameScreen.style.display = '';
+                current = 0;
+                correctCount = 0;
+                loadCurrentQuestion();
+            })
+            .catch(err => {
+                message.textContent = 'Failed to load questions.';
+            });
+    }
+
+    function loadCurrentQuestion() {
+        if (current >= questions.length) {
+            endGame();
+            return;
+        }
+        lives = 3;
+        livesSpan.textContent = lives;
+        message.textContent = '';
+        let q = questions[current];
+        progress.textContent = `Question ${current+1} of ${questions.length}`;
+        questionText.textContent = q.question;
+        hintEng.textContent = q.helpEnglish;
+        hintSent.textContent = q.helpSentence;
+
+        // handle image
+        const img = document.getElementById('question-image');
+        if (q.helpImagePath) {
+            // assume images are served from wwwroot and path is relative (e.g. "images/foo.png")
+            img.src = q.helpImagePath;
+            img.style.display = '';
+        } else {
+            img.src = '';
+            img.style.display = 'none';
+        }
+        
+        
+
+        // hide hints
+        hintEng.classList.add('blocked');
+        hintSent.classList.add('blocked');
+        answerInput.value = '';
+        answerInput.focus();
+    }
+
+    function submitAnswer() {
+        if (!questions.length) return;
+        let q = questions[current];
+        let given = answerInput.value.trim();
+        if (!given) return;
+        if (given.toLowerCase() === (q.question || '').toLowerCase()) {
+            correctCount++;
+            message.style.color = 'green';
+            message.textContent = 'Correct! Moving to next question.';
+            current++;
+            setTimeout(loadCurrentQuestion, 800);
+        } else {
+            lives--;
+            livesSpan.textContent = lives;
+            message.style.color = 'darkred';
+            if (lives <= 0) {
+                message.textContent = 'No lives left. Moving to next question.';
+                current++;
+                setTimeout(loadCurrentQuestion, 800);
+            } else {
+                message.textContent = `Wrong. ${lives} lives remaining.`;
+            }
+        }
+    }
+
+    function revealHint(el) {
+        el.classList.remove('blocked');
+    }
+
+    function endGame() {
+        gameScreen.style.display = 'none';
+        endScreen.style.display = '';
+        finalMessage.textContent = `You answered ${correctCount} of ${questions.length} correctly.`;
+    }
+</script>
