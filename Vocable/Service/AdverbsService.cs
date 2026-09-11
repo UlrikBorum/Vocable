@@ -21,6 +21,9 @@ namespace Vocable.Service
             _adverbQuestionsRepo = new GenericRepo<Adverb_Question>();
         }
 
+        public IRepo<Adverb_Question> AdverbQuestionRepo { get  { return _adverbQuestionsRepo; } set {  _adverbQuestionsRepo = value;  }   }
+        
+
         public void AddAnAdverbQuestionRepo(IRepo<Adverb_Question> questions)
         {
 

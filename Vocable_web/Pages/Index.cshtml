@@ -5,13 +5,17 @@
 }
 
 <div class="container">
+
+    <center>
     <h1>Adverb Quiz</h1>
 
     <div id="start-screen">
         <p>Press the button to start a 5-question quiz.</p>
         <button id="start-btn">Start Game</button>
     </div>
+    </center>
 
+    <center>
     <div id="game-screen" style="display:none;">
         <div>
             <strong id="progress">Question 0 of 5</strong>
@@ -21,7 +25,7 @@
            
             
             <img id="question-image" src="" alt="question-image" style="max-width:200px;display:none;" />
-            <div id="question-text"></div>
+            @* <div id="question-text"></div> *@
         </div> 
 
         <div>
@@ -47,12 +51,15 @@
             <div id="message" style="color:darkred;"></div>
         </div>
     </div>
+    </center>
 
+    <center>
     <div id="end-screen" style="display:none; margin-top:1rem;">
         <h3>Quiz finished</h3>
         <div id="final-message"></div>
         <button id="play-again">Play Again</button>
     </div>
+    </center>
 </div>
 
 <style>
@@ -124,7 +131,10 @@
         message.textContent = '';
         let q = questions[current];
         progress.textContent = `Question ${current+1} of ${questions.length}`;
-        questionText.textContent = q.question;
+        if (questionText)
+        {
+            questionText.textContent = q.question;
+        }
         hintEng.textContent = q.helpEnglish;
         hintSent.textContent = q.helpSentence;
 
