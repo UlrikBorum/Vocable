@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using System.Text;
 
 namespace Vocable.Service
@@ -25,7 +24,7 @@ namespace Vocable.Service
         public IRepo<Adverb_Question> AdverbQuestionRepo { get  { return _adverbQuestionsRepo; } set {  _adverbQuestionsRepo = value;  }   }
         
 
-        public void AddAnAdverbQuestionRepo()
+        public void AddAnAdverbQuestionRepo(IRepo<Adverb_Question> questions)
         {
 
             // Implementation for adding a new adverb question to the database or collection      
@@ -45,18 +44,13 @@ namespace Vocable.Service
         }
 
 
-        // Take 5 random questions from the repo and return them as a shuffled Generic List of Adverb_Question objects
-        public GenericRepo<Adverb_Question> GetRandomAdverbQuestions(int numberOfQuestions)
+        // Take 5 random questions from the repo and return them as an array
+        public Adverb_Question[] GetRandomAdverbQuestions(int numberOfQuestions)
         {
             var allQuestions = _adverbQuestionsRepo.ReadAll();
             var xQuestionsArray = allQuestions.Take(numberOfQuestions).ToArray();
             ShuffleArray(r, xQuestionsArray);
-            
-            GenericRepo<Adverb_Question> genericList = new GenericRepo<Adverb_Question>(xQuestionsArray.ToList());
-           
-
-       
-            return genericList;
+            return xQuestionsArray;
         }
 
 
