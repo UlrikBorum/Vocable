@@ -185,6 +185,8 @@ namespace Vocable_web.Pages
             GameEnded = true;
             GameStarted = false;
 
+            // Deleted loaded questions from TempData, as we still have the Questions property in memory
+
             FinalMessage = $"You answered {CorrectCount} of {Questions.ReadAll().Count} correctly.";
 
             // clear persisted questions when game ends
