@@ -7,7 +7,7 @@
 <div class="container">
 
     <center>
-        <h1 style="margin-top: 1rem">VOCABLE</h1>
+        <h1 class="headline1">VOCABLE</h1>
 
         @* Start screen *@
         @if (!Model.GameStarted && !Model.GameEnded)
@@ -15,7 +15,7 @@
             <div id="start-screen">
                 <p>Press the button to start a 5-question quiz.</p>
                 <form method="post">
-                    <button type="submit" asp-page-handler="Start" class="submit">Start Game</button>
+                    <button type="submit" asp-page-handler="Start" class="submit">Start game</button>
                 </form>
             </div>
         }
@@ -38,7 +38,7 @@
                 <div style="margin-top:1rem;">
                     @if (currentQuestion != null)
                     {
-                        <img src="@(currentQuestion.HelpImagePath ?? string.Empty)" alt="question-image" style="max-width:200px;" />
+                        <img src="@(currentQuestion.HelpImagePath ?? string.Empty)" alt="question-image" style="max-width:200px; margin-bottom: 2rem" />
                     }
                 </div>
 
@@ -51,8 +51,8 @@
                             <input asp-for="ShowEnglishHint" type="hidden" />
                             <input asp-for="ShowSentenceHint" type="hidden" />
 
-                            <label>Answer:</label>
-                            <input asp-for="Answer" />
+                            <label style="">Answer:</label>
+                            <input asp-for="Answer" id="answerInput" autocomplete="off" />
                             <button type="submit" asp-page-handler="Submit" class="submit">Submit</button>
                         </form>
                 </div>
@@ -96,6 +96,54 @@
         </center>
     }
 
+    <script>
+        (function(){
+            // When the game screen is present, capture printable key presses anywhere on the page
+            // and forward them into the answer input. If an input/textarea is already focused, do nothing.
+            function isTextInputFocused() {
+                var a = document.activeElement;
+                if (!a) return false;
+                var tag = a.tagName ? a.tagName.toLowerCase() : '';
+                return tag === 'input' || tag === 'textarea' || a.isContentEditable;
+            }
+
+            document.addEventListener('keydown', function (e) {
+                try {
+                    var game = document.getElementById('game-screen');
+                    if (!game) return; // only active during game
+
+                    if (isTextInputFocused()) return; // already typing somewhere
+
+                    // ignore modifier-only keys
+                    if (e.ctrlKey || e.metaKey || e.altKey) return;
+
+                    var input = document.getElementById('answerInput');
+                    if (!input) return;
+
+                    // Printable characters have length 1 for e.key
+                    if (e.key && e.key.length === 1) {
+                        // insert character at caret position
+                        var start = input.selectionStart != null ? input.selectionStart : input.value.length;
+                        var end = input.selectionEnd != null ? input.selectionEnd : start;
+                        input.value = input.value.slice(0, start) + e.key + input.value.slice(end);
+                        // focus and move caret
+                        input.focus();
+                        var pos = start + 1;
+                        input.setSelectionRange(pos, pos);
+                        e.preventDefault();
+                    }
+                    else if (e.key === 'Backspace') {
+                        // focus so user can use backspace
+                        input.focus();
+                    }
+                }
+                catch (ex) {
+                    // swallow errors - non-critical
+                }
+            }, false);
+        })();
+    </script>
+
     @* End screen *@
     @if (Model.GameEnded)
     {
@@ -104,7 +152,7 @@
                 <h3>Quiz finished</h3>
                 <div>@Model.FinalMessage</div>
                 <form method="post">
-                    <button type="submit" asp-page-handler="PlayAgain">Play Again</button>
+                    <button type="submit" asp-page-handler="PlayAgain" class="submit">Play Again</button>
                 </form>
             </div>
         </center>

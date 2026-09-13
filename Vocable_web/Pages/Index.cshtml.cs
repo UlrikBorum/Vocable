@@ -124,6 +124,10 @@ namespace Vocable_web.Pages
                 Message = "Correct! Moving to next question.";
                 MessageClass = "message-correct";
                 Current++;
+                    // clear the answer for the next question and remove any ModelState entry so the tag helper
+                    // renders the updated empty value (ModelState values take precedence over the property)
+                    Answer = string.Empty;
+                    ModelState.Remove(nameof(Answer));
                 Lives = 3;
                 ShowEnglishHint = false;
                 ShowSentenceHint = false;
@@ -136,6 +140,9 @@ namespace Vocable_web.Pages
                     Message = "No lives left. Moving to next question.";
                     MessageClass = "message-wrong";
                     Current++;
+                    // clear the answer when advancing after losing all lives and remove ModelState entry
+                    Answer = string.Empty;
+                    ModelState.Remove(nameof(Answer));
                     Lives = 3;
                     ShowEnglishHint = false;
                     ShowSentenceHint = false;

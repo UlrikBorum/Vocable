@@ -20,6 +20,18 @@ html {
   min-height: 100%;
 }
 
+.headline1 {
+    font-family: "brandon-grotesque", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    font-size: 4rem;
+    line-height: 1.2;
+    letter-spacing: 0.2rem;
+  -webkit-text-stroke: 0.2rem red;
+    paint-order: stroke fill;
+    color: red;
+    margin-top: 2rem;
+}
 
 
 body {
@@ -45,19 +57,25 @@ body {
 .submit {
     border: none;
     outline: 0;
+    font-family: "brandon-grotesque", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    background-color: darkorange;
+    text-transform: uppercase;
 }
 
 
 .hint {
     padding: 0.5rem;
     width: 100%;
-    max-width: 600px;
     cursor: pointer;
-    text-align: left;
+    text-align: center;
     background: transparent;
     color: inherit;
     border: none;
     outline: 0;
+ 
+   
 }
     /* Blocked state: visually black out the hints */
     .hint.blocked {
@@ -66,6 +84,9 @@ body {
         user-select: none;
         border: none;
         outline: 0;
+        font-family: "brandon-grotesque", sans-serif;
+        font-weight: 900;
+        font-style: normal;
     }
     /* Revealed state: show readable text */
     .hint.revealed {
@@ -73,6 +94,10 @@ body {
         color: inherit;
         border: none;
         outline: 0;
+        font-family: "brandon-grotesque", sans-serif;
+        font-weight: 900;
+        font-style: italic;
+        font-size: 1.2rem;
     }
 
     .hint:focus, .hint:hover {
@@ -81,8 +106,14 @@ body {
 
 .message-correct {
     color: yellow;
+    font-family: "brandon-grotesque", sans-serif;
+    font-weight: 900;
+    font-style: italic;
 }
 
 .message-wrong {
     color: red;
+    font-family: "brandon-grotesque", sans-serif;
+    font-weight: 900;
+    font-style: italic;
 }
