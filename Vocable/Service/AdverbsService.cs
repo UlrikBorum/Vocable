@@ -49,9 +49,9 @@ namespace Vocable.Service
         public GenericRepo<Adverb_Question> GetRandomAdverbQuestions(int numberOfQuestions)
         {
             var allQuestions = _adverbQuestionsRepo.ReadAll();
-            var xQuestionsArray = allQuestions.Take(numberOfQuestions).ToArray();
+            var xQuestionsArray = allQuestions.ToArray();
             ShuffleArray(r, xQuestionsArray);
-            
+            xQuestionsArray = xQuestionsArray.Take(numberOfQuestions).ToArray();
             GenericRepo<Adverb_Question> genericList = new GenericRepo<Adverb_Question>(xQuestionsArray.ToList());
            
 

@@ -7,7 +7,7 @@
 <div class="container">
 
     <center>
-        <h1>Adverb Quiz</h1>
+        <h1 style="margin-top: 1rem">VOCABLE</h1>
 
         @* Start screen *@
         @if (!Model.GameStarted && !Model.GameEnded)
@@ -87,10 +87,11 @@
                         </form>
                     </div>
                 </div>
-
-                <div style="margin-top:1rem; color:darkred;">
-                    @if (!string.IsNullOrEmpty(Model.Message)) { <div>@Model.Message</div> }
-                </div>
+                
+                <div style="margin-top:1rem;">
+                    @if (!string.IsNullOrEmpty(Model.Message)) { <div class="@(Model.MessageClass ?? string.Empty)">@Model.Message</div> }
+                    </div>
+                
             </div>
         </center>
     }
@@ -110,28 +111,3 @@
     }
 
 </div>
-
-<style>
-    .hint {
-        padding:0.5rem;
-        border:1px solid #ccc;
-        width:100%;
-        max-width:600px;
-        cursor:pointer;
-        text-align:left;
-        background:transparent;
-        color:inherit;
-    }
-    /* Blocked state: visually black out the text */
-    .hint.blocked {
-        background:#000;
-        color:#000;
-        user-select:none;
-    }
-    /* Revealed state: show readable text */
-    .hint.revealed {
-        background:transparent;
-        color:inherit;
-    }
-    .hint:focus, .hint:hover { outline:none; }
-</style>

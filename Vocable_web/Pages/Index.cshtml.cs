@@ -21,6 +21,8 @@ namespace Vocable_web.Pages
             _repo = repo;
         }
 
+
+        #region properties
         [BindProperty]
         public int Current { get; set; }
 
@@ -41,12 +43,19 @@ namespace Vocable_web.Pages
 
         [BindProperty]
         public GenericRepo<Adverb_Question> Questions { get; set; } = new GenericRepo<Adverb_Question>();
+        
+
+
 
 
         public string Message { get; set; } = string.Empty;
+        public string MessageClass { get; set; } = string.Empty;
         public bool GameStarted { get; set; }
         public bool GameEnded { get; set; }
         public string FinalMessage { get; set; } = string.Empty;
+
+
+        #endregion
 
         public void OnGet()
         {
@@ -86,6 +95,7 @@ namespace Vocable_web.Pages
             if (qs.ReadAll().Count == 0)
             {
                 Message = "No questions available.";
+                MessageClass = string.Empty;
                 GameStarted = false;
                 return Page();
             }
@@ -103,6 +113,7 @@ namespace Vocable_web.Pages
             if (string.IsNullOrEmpty(given))
             {
                 Message = "Please enter an answer.";
+                MessageClass = "message-wrong";
                 GameStarted = true;
                 return Page();
             }
@@ -111,6 +122,7 @@ namespace Vocable_web.Pages
             {
                 CorrectCount++;
                 Message = "Correct! Moving to next question.";
+                MessageClass = "message-correct";
                 Current++;
                 Lives = 3;
                 ShowEnglishHint = false;
@@ -122,6 +134,7 @@ namespace Vocable_web.Pages
                 if (Lives <= 0)
                 {
                     Message = "No lives left. Moving to next question.";
+                    MessageClass = "message-wrong";
                     Current++;
                     Lives = 3;
                     ShowEnglishHint = false;
@@ -130,6 +143,7 @@ namespace Vocable_web.Pages
                 else
                 {
                     Message = $"Wrong. {Lives} lives remaining.";
+                    MessageClass = "message-wrong";
                 }
             }
 
@@ -185,7 +199,7 @@ namespace Vocable_web.Pages
             GameEnded = true;
             GameStarted = false;
 
-            // Deleted loaded questions from TempData, as we still have the Questions property in memory
+            // Deleted save data to TempData, as we still have the Questions property in memory
 
             FinalMessage = $"You answered {CorrectCount} of {Questions.ReadAll().Count} correctly.";
 
@@ -195,19 +209,10 @@ namespace Vocable_web.Pages
 
         private const string TempKey = "QuizStateJson";
 
-        private class QuizState
-        {
-            public List<Adverb_Question>? Questions { get; set; }
-            public int Current { get; set; }
-            public int Lives { get; set; }
-            public int CorrectCount { get; set; }
-            public bool ShowEnglishHint { get; set; }
-            public bool ShowSentenceHint { get; set; }
-        }
 
         private void SaveStateToTemp()
         {
-            var state = new QuizState
+            QuizState state = new QuizState
             {
                 Questions = Questions?.ReadAll() ?? new List<Adverb_Question>(),
                 CorrectCount = CorrectCount,
