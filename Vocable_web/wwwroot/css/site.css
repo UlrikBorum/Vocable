@@ -10,14 +10,17 @@ html {
   }
 }
 
+
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-/*  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;*/
+    box-shadow: none;
 }
 
 html {
   position: relative;
   min-height: 100%;
 }
+
+
 
 body {
     margin-bottom: 60px;
@@ -38,6 +41,13 @@ body {
 
 /* Custom styles for this template */
 
+
+.submit {
+    border: none;
+    outline: 0;
+}
+
+
 .hint {
     padding: 0.5rem;
     width: 100%;
@@ -46,17 +56,23 @@ body {
     text-align: left;
     background: transparent;
     color: inherit;
+    border: none;
+    outline: 0;
 }
     /* Blocked state: visually black out the hints */
     .hint.blocked {
         background: #000;
         color: #ffff;
         user-select: none;
+        border: none;
+        outline: 0;
     }
     /* Revealed state: show readable text */
     .hint.revealed {
         background: transparent;
         color: inherit;
+        border: none;
+        outline: 0;
     }
 
     .hint:focus, .hint:hover {
