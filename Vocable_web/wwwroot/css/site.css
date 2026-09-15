@@ -121,13 +121,90 @@ body {
     gap: 0.25rem;
     align-items: center;
     vertical-align: middle;
+
 }
 .lives .life {
     font-size: 1.7rem;
     line-height: 1;
-    color: red; 
-    text-shadow: 0 0 0.1rem rgba(0,0,0,0.2);
+    color: red;
+}
+.lives .life.full {
+    color: red;
 }
 .lives .life.empty {
-    opacity: 0.35;
+    color: #000; /* black when lost */
+
+}
+
+
+
+/* Explainer modal */
+
+.explainer-button {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1000;
+    background: red;
+    width: 2rem;
+    height: 2rem;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+
+    font-family: "brandon-grotesque", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    font-size: 1rem;
+    text-align: center;    
+}
+
+.explainer-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.0); /* semi-transparent backdrop */
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1100;
+    padding: 1rem;
+}
+
+.explainer-modal {
+    background: rgba(255,165,063, 0.8); /* semi-transparent modal */
+    backdrop-filter: blur(5px);
+    max-width: 640px;
+    width: 100%;
+    max-height: 520px;
+    height: 100%;
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    position: relative;
+    margin-top: 3rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    color: #111;
+}
+
+.explainer-close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    font-family: "brandon-grotesque", sans-serif;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.explainer-modal h3 {
+    margin-top: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.explainer-modal p {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    color: #333;
 }

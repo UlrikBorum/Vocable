@@ -64,7 +64,14 @@
                             var maxLives = 3;
                             for (int i = 0; i < maxLives; i++)
                             {
-                                <text><span class="life">@(i < Model.Lives ? "♥" : "♡")</span></text>
+                                if (i < Model.Lives)
+                                {
+                                    <text><span class="life full" aria-hidden="true">♥</span></text>
+                                }
+                                else
+                                {
+                                    <text><span class="life empty" aria-hidden="true">♡</span></text>
+                                }
                             }
                         }
                     </span>
@@ -168,3 +175,57 @@
     }
 
 </div>
+
+@* Explainer button and modal *@
+
+
+<button id="explainerBtn" class="explainer-button">?</button>
+
+<div id="explainerOverlay" class="explainer-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="explainer-modal">
+        <button id="explainerClose" class="explainer-close" aria-label="Close">×</button>
+
+        <h3>Headline 1</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</p>
+
+        <h3>Headline 2</h3>
+        <p>Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris.</p>
+
+        <h3>Headline 3</h3>
+        <p>Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.</p>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var btn = document.getElementById('explainerBtn');
+        var overlay = document.getElementById('explainerOverlay');
+        var closeBtn = document.getElementById('explainerClose');
+
+        function open() {
+            overlay.style.display = 'flex';
+            overlay.setAttribute('aria-hidden', 'false');
+            // prevent background scroll when open
+            document.body.style.overflow = 'hidden';
+        }
+
+        function close() {
+            overlay.style.display = 'none';
+            overlay.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        if (btn) btn.addEventListener('click', open);
+        if (closeBtn) closeBtn.addEventListener('click', close);
+
+        // click outside modal to close
+        if (overlay) overlay.addEventListener('click', function (e) {
+            if (e.target === overlay) close();
+        });
+
+        // close with Escape
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && overlay.style.display === 'flex') close();
+        });
+    })();
+</script>
