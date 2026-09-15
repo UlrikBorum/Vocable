@@ -1,5 +1,3 @@
-
-
 html {
   font-size: 14px;
 }
@@ -36,7 +34,7 @@ html {
 
 body {
     margin-bottom: 60px;
-    background-color: #ffa542;
+    background-image: linear-gradient(to top, rgb(255,140,063), rgb(255,165,063),rgb(255,165,063),rgb(255,165,063));
     overflow: hidden;
 }
 
@@ -50,8 +48,6 @@ body {
 }
 
 
-
-/* Custom styles for this template */
 
 
 .submit {
@@ -82,6 +78,7 @@ body {
         background: #000;
         color: #ffff;
         user-select: none;
+        border-radius: 1rem;
         border: none;
         outline: 0;
         font-family: "brandon-grotesque", sans-serif;
@@ -116,4 +113,21 @@ body {
     font-family: "brandon-grotesque", sans-serif;
     font-weight: 900;
     font-style: italic;
+}
+
+/* Lives (heart icons) styling */
+.lives {
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+    vertical-align: middle;
+}
+.lives .life {
+    font-size: 1.7rem;
+    line-height: 1;
+    color: red; 
+    text-shadow: 0 0 0.1rem rgba(0,0,0,0.2);
+}
+.lives .life.empty {
+    opacity: 0.35;
 }

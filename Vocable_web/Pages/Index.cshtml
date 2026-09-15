@@ -51,14 +51,23 @@
                             <input asp-for="ShowEnglishHint" type="hidden" />
                             <input asp-for="ShowSentenceHint" type="hidden" />
 
-                            <label style="">Answer:</label>
+                            @* <label style="">Answer:</label> *@
                             <input asp-for="Answer" id="answerInput" autocomplete="off" />
                             <button type="submit" asp-page-handler="Submit" class="submit">Submit</button>
                         </form>
                 </div>
 
                 <div style="margin-top:1rem;">
-                    <span>Lives: </span><span>@Model.Lives</span>
+                  @*   <span>Lives: </span> *@
+                    <span class="lives" aria-label="Lives">
+                        @{
+                            var maxLives = 3;
+                            for (int i = 0; i < maxLives; i++)
+                            {
+                                <text><span class="life">@(i < Model.Lives ? "♥" : "♡")</span></text>
+                            }
+                        }
+                    </span>
                 </div>
 
                 <div style="margin-top:1rem; max-width:600px;">
@@ -101,10 +110,10 @@
             // When the game screen is present, capture printable key presses anywhere on the page
             // and forward them into the answer input. If an input/textarea is already focused, do nothing.
             function isTextInputFocused() {
-                var a = document.activeElement;
-                if (!a) return false;
-                var tag = a.tagName ? a.tagName.toLowerCase() : '';
-                return tag === 'input' || tag === 'textarea' || a.isContentEditable;
+                const active = document.activeElement;
+                if (!active) return false;
+                var tag = active.tagName ? active.tagName.toLowerCase() : '';
+                return tag === 'input' || tag === 'textarea' || active.isContentEditable;
             }
 
             document.addEventListener('keydown', function (e) {
