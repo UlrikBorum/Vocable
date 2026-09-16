@@ -36,11 +36,11 @@ namespace Vocable.Service
             _adverbQuestionsRepo.Create(new Adverb_Question { Id = 2, Question = "venir", HelpImagePath = "/images/correr_image.gif", HelpEnglish = "to come", HelpSentence = "¿Puedes venir mañana?" });
             _adverbQuestionsRepo.Create(new Adverb_Question { Id = 3, Question = "tener", HelpImagePath = "/images/comer_image.gif", HelpEnglish = "to have", HelpSentence = "Tengo dos libros." });
             _adverbQuestionsRepo.Create(new Adverb_Question { Id = 4, Question = "hacer", HelpImagePath = "/images/correr_image.gif", HelpEnglish = "to do/make", HelpSentence = "Ella hace la tarea." });
-            _adverbQuestionsRepo.Create(new Adverb_Question { Id = 5, Question = "decir", HelpImagePath = "/images/correr_image.gif", HelpEnglish = "to say/tell", HelpSentence = "Él dice la verdad." });
-            _adverbQuestionsRepo.Create(new Adverb_Question { Id = 6, Question = "ver", HelpImagePath = "/images/comer_image.gif", HelpEnglish = "to see", HelpSentence = "Veo la película." });
+            _adverbQuestionsRepo.Create(new Adverb_Question { Id = 5, Question = "quierer", HelpImagePath = "/images/quierer_image.gif", HelpEnglish = "to want", HelpSentence = "Él quiere una manzana." });
+            _adverbQuestionsRepo.Create(new Adverb_Question { Id = 6, Question = "ver", HelpImagePath = "/images/quierer_image.gif", HelpEnglish = "to see", HelpSentence = "Veo la película." });
             _adverbQuestionsRepo.Create(new Adverb_Question { Id = 7, Question = "saber", HelpImagePath = "/images/comer_image.gif", HelpEnglish = "to know", HelpSentence = "Sé la respuesta." });
             _adverbQuestionsRepo.Create(new Adverb_Question { Id = 8, Question = "comer", HelpImagePath = "/images/comer_image.gif", HelpEnglish = "to eat", HelpSentence = "Ella come manzanas." });
-            _adverbQuestionsRepo.Create(new Adverb_Question { Id = 9, Question = "vivir", HelpImagePath = "/images/correr_image.gif", HelpEnglish = "to live", HelpSentence = "Nosotros vivimos aquí." });
+            _adverbQuestionsRepo.Create(new Adverb_Question { Id = 9, Question = "vivir", HelpImagePath = "/images/quierer_image.gif", HelpEnglish = "to live", HelpSentence = "Nosotros vivimos aquí." });
             _adverbQuestionsRepo.Create(new Adverb_Question { Id = 10, Question = "ir", HelpImagePath = "/images/correr_image.gif", HelpEnglish = "to go", HelpSentence = "Voy al mercado." });
             _adverbQuestionsRepo.Create(new Adverb_Question { Id = 11, Question = "correr", HelpImagePath = "/images/correr_image.gif", HelpEnglish = "to run", HelpSentence = "Él corre todos los días." });
             _adverbQuestionsRepo.Create(new Adverb_Question { Id = 12, Question = "leer", HelpImagePath = "/images/comer_image.gif", HelpEnglish = "to read", HelpSentence = "Ella lee un libro." });

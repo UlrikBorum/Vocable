@@ -31,6 +31,11 @@ html {
     margin-top: 2rem;
 }
 
+::selection {
+    color: white;
+    background: red;
+}
+
 
 body {
     margin-bottom: 60px;
@@ -51,6 +56,15 @@ body {
 
 
 .submit {
+    border: none;
+    outline: 0;
+    font-family: "brandon-grotesque", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    background-color: darkorange;
+    text-transform: uppercase;
+}
+.Answer-submit {
     border: none;
     outline: 0;
     font-family: "brandon-grotesque", sans-serif;
@@ -170,6 +184,14 @@ body {
     z-index: 1100;
     padding: 1rem;
 }
+h3 {
+    font-family: "brandon-grotesque", sans-serif;
+    font-weight: 900;
+    font-style: normal;
+    font-size: 2rem;
+    color: red;
+}
+
 
 .explainer-modal {
     background: rgba(255,165,063, 0.8); /* semi-transparent modal */
@@ -207,4 +229,21 @@ body {
     margin-top: 0;
     margin-bottom: 0.75rem;
     color: #333;
+}
+
+/* Correct answer animation overlay */
+.correct-animation-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.25);
+    z-index: 1200;
+}
+.correct-animation-img {
+    max-width: 240px;
+    width: 40%;
+    height: auto;
+    pointer-events: none;
 }

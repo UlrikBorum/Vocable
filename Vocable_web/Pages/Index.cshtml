@@ -38,7 +38,8 @@
                 <div style="margin-top:1rem;">
                     @if (currentQuestion != null)
                     {
-                        <img src="@(currentQuestion.HelpImagePath ?? string.Empty)" alt="question-image" style="max-width:200px; margin-bottom: 2rem" />
+                         var originalSrc = currentQuestion.HelpImagePath ?? string.Empty; 
+                        <img id="questionImage" src="@(Model.ShowCorrectAnimation ? "/images/correct_image.gif" : originalSrc)" data-original-src="@originalSrc" alt="question-image" style="max-width:200px; margin-bottom: 2rem" />
                     }
                 </div>
 
@@ -111,6 +112,27 @@
             </div>
         </center>
     }
+
+    @* Correct answer animation overlay (plays once for 1.7 second) *@
+    @if (Model.ShowCorrectAnimation)
+    {
+        <script>
+            (function(){
+                try {
+                    var img = document.getElementById('questionImage');
+                    if (!img) return;
+                    setTimeout(function(){
+                        var orig = img.getAttribute('data-original-src') || '';
+                        img.setAttribute('src', orig);
+                    }, 1700);
+                }
+                catch (e) {
+                    // ignore
+                }
+            })();
+        </script>
+    }
+
 
     <script>
         (function(){
@@ -185,14 +207,20 @@
     <div class="explainer-modal">
         <button id="explainerClose" class="explainer-close" aria-label="Close">×</button>
 
-        <h3>Headline 1</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam.</p>
+        <h3>What is vocable?</h3>
+        <p>I made this game to memerize spanish verbs.</p>
 
-        <h3>Headline 2</h3>
-        <p>Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris.</p>
-
-        <h3>Headline 3</h3>
-        <p>Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.</p>
+        <h3>How to play</h3>
+        <p>
+            A small animation will loop. It is your job to type the spanish verb in infinitive, given this hint. <br />            
+            You are given two hints if you can't remember or decipher the animation.<br /> 
+            press the english word. If this is the first time seeing this word, there is also a spanish sentence. <br />
+            you have three attempts per verb, shown in hearts like this:<br />
+            <center> <span style="color: red"> ♥ ♥ ♥</span></center>
+        </p>
+            <center><h3>Good luck! / ¡buena suerte!</h3></center>
+        @* <h3>Headline 3</h3>
+        <p>Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.</p> *@
     </div>
 </div>
 

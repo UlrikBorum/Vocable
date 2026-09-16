@@ -39,6 +39,9 @@ namespace Vocable_web.Pages
         public bool ShowSentenceHint { get; set; }
 
         [BindProperty]
+        public bool ShowCorrectAnimation { get; set; }
+
+        [BindProperty]
         public string Answer { get; set; } = string.Empty;
 
         [BindProperty]
@@ -74,6 +77,7 @@ namespace Vocable_web.Pages
             CorrectCount = 0;
             ShowEnglishHint = false;
             ShowSentenceHint = false;
+            ShowCorrectAnimation = false;
             Message = string.Empty;
             GameStarted = true;
             GameEnded = false;
@@ -115,6 +119,8 @@ namespace Vocable_web.Pages
                 Message = "Please enter an answer.";
                 MessageClass = "message-wrong";
                 GameStarted = true;
+                // ensure no lingering correct-animation flag when user hasn't answered
+                ShowCorrectAnimation = false;
                 return Page();
             }
 
@@ -123,6 +129,8 @@ namespace Vocable_web.Pages
                 CorrectCount++;
                 Message = "Correct! Moving to next question.";
                 MessageClass = "message-correct";
+                // show short animation between questions
+                ShowCorrectAnimation = true;
                 Current++;
                     // clear the answer for the next question and remove any ModelState entry so the tag helper
                     // renders the updated empty value (ModelState values take precedence over the property)
@@ -137,7 +145,7 @@ namespace Vocable_web.Pages
                 Lives--;
                 if (Lives <= 0)
                 {
-                    Message = "No lives left. Moving to next question.";
+                    Message = $"No lives left. The answer was {q.Question}! Moving to next question.";
                     MessageClass = "message-wrong";
                     Current++;
                     // clear the answer when advancing after losing all lives and remove ModelState entry
@@ -146,11 +154,15 @@ namespace Vocable_web.Pages
                     Lives = 3;
                     ShowEnglishHint = false;
                     ShowSentenceHint = false;
+                    // ensure no animation when advancing due to losing lives
+                    ShowCorrectAnimation = false;
                 }
                 else
                 {
                     Message = $"Wrong. {Lives} lives remaining.";
                     MessageClass = "message-wrong";
+                    // don't show correct animation on wrong answer
+                    ShowCorrectAnimation = false;
                 }
             }
 
@@ -177,6 +189,8 @@ namespace Vocable_web.Pages
 
             ShowEnglishHint = true;
             GameStarted = true;
+            // ensure animation flag is cleared when revealing hints (only answers should trigger it)
+            ShowCorrectAnimation = false;
             // persist hint state
             SaveStateToTemp();
             return Page();
@@ -189,6 +203,8 @@ namespace Vocable_web.Pages
 
             ShowSentenceHint = true;
             GameStarted = true;
+            // ensure animation flag is cleared when revealing hints (only answers should trigger it)
+            ShowCorrectAnimation = false;
             // persist hint state
             SaveStateToTemp();
             return Page();
@@ -206,7 +222,7 @@ namespace Vocable_web.Pages
             GameEnded = true;
             GameStarted = false;
 
-            // Deleted save data to TempData, as we still have the Questions property in memory
+            
 
             FinalMessage = $"You answered {CorrectCount} of {Questions.ReadAll().Count} correctly.";
 
@@ -226,7 +242,9 @@ namespace Vocable_web.Pages
                 Current = Current,  
                 Lives = Lives,
                 ShowEnglishHint = ShowEnglishHint,
-                ShowSentenceHint = ShowSentenceHint
+                ShowSentenceHint = ShowSentenceHint,
+                // preserve animation flag briefly so view can show animation then client-side script will revert
+                ShowCorrectAnimation = ShowCorrectAnimation
             };
 
             var json = JsonSerializer.Serialize(state);
@@ -251,6 +269,7 @@ namespace Vocable_web.Pages
                 CorrectCount = state.CorrectCount;
                 ShowEnglishHint = state.ShowEnglishHint;
                 ShowSentenceHint = state.ShowSentenceHint;
+                ShowCorrectAnimation = state.ShowCorrectAnimation;
             }
             catch
             {

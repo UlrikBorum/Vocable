@@ -12,6 +12,7 @@ namespace Vocable.Service
         public int CorrectCount { get; set; }
         public bool ShowEnglishHint { get; set; }
         public bool ShowSentenceHint { get; set; }
+        public bool ShowCorrectAnimation { get; set; }
 
 
         public QuizState()
@@ -22,6 +23,7 @@ namespace Vocable.Service
             CorrectCount = 0;
             ShowEnglishHint = false;
             ShowSentenceHint = false;
+            ShowCorrectAnimation = false;
         }
 
     }
