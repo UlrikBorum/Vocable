@@ -33,7 +33,7 @@ namespace Vocable
             _helpSentence = "This is a placeholder.";
         }
 
-        public Adverb_Question(int id, string question, string helpImage, string helpEng, string help, string sentence)
+        public Adverb_Question(int id, string question, string helpImage, string helpEng, string sentence)
         {
             _id = id;
             _question = question;

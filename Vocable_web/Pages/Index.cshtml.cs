@@ -10,52 +10,31 @@ namespace Vocable_web.Pages
 {
     public class IndexModel : PageModel
     {
+        #region instance fields
         private readonly AdverbsService _adverbsService;
+        #endregion
 
-        private readonly GenericRepo<Adverb_Question> _repo;
-    
+        #region constructor
 
-        public IndexModel(AdverbsService adverbsService, GenericRepo<Adverb_Question> repo)
+        public IndexModel(AdverbsService adverbsService)
         {
             _adverbsService = adverbsService;
-            _repo = repo;
+         
         }
+        #endregion
 
 
         #region properties
-        [BindProperty]
-        public int Current { get; set; }
-
-        [BindProperty]
-        public int Lives { get; set; }
-
-        [BindProperty]
-        public int CorrectCount { get; set; }
-
-        [BindProperty]
-        public bool ShowEnglishHint { get; set; }
-
-        [BindProperty]
-        public bool ShowSentenceHint { get; set; }
-
-        [BindProperty]
-        public bool ShowCorrectAnimation { get; set; }
-
+       
         [BindProperty]
         public string Answer { get; set; } = string.Empty;
 
         [BindProperty]
         public GenericRepo<Adverb_Question> Questions { get; set; } = new GenericRepo<Adverb_Question>();
-        
 
+        [BindProperty]
+        public QuizState QS { get; set; } = new QuizState();
 
-
-
-        public string Message { get; set; } = string.Empty;
-        public string MessageClass { get; set; } = string.Empty;
-        public bool GameStarted { get; set; }
-        public bool GameEnded { get; set; }
-        public string FinalMessage { get; set; } = string.Empty;
 
 
         #endregion
@@ -69,18 +48,19 @@ namespace Vocable_web.Pages
         public IActionResult OnPostStart()
         {
             // Service already populated in Program.cs as singleton
-            var qs = _adverbsService.GetRandomAdverbQuestions(5);
+            var aq = _adverbsService.GetRandomAdverbQuestions(5);
 
-            Questions = qs;
-            Current = 0;
-            Lives = 3;
-            CorrectCount = 0;
-            ShowEnglishHint = false;
-            ShowSentenceHint = false;
-            ShowCorrectAnimation = false;
-            Message = string.Empty;
-            GameStarted = true;
-            GameEnded = false;
+            Questions = aq;
+            QS.Current = 0;
+            QS.Lives = 3;
+            QS.CorrectCount = 0;
+            QS.ShowEnglishHint = false;
+            QS.ShowSentenceHint = false;
+            QS.ShowCorrectAnimation = false;
+
+            
+            QS.GameStarted = true;
+            QS.GameEnded = false;
 
             // Persist questions between POST requests so hint actions can reload them
             SaveStateToTemp();
@@ -94,87 +74,87 @@ namespace Vocable_web.Pages
             // Reload persisted state (forms don't post the full repo)
             LoadStateFromTemp();
 
-            var qs = Questions;
+            var aq = Questions;
 
-            if (qs.ReadAll().Count == 0)
+            if (aq.ReadAll().Count == 0)
             {
-                Message = "No questions available.";
-                MessageClass = string.Empty;
-                GameStarted = false;
+                QS.Message = "No questions available.";
+                QS.MessageClass = string.Empty;
+                QS.GameStarted = false;
                 return Page();
             }
 
             // ensure bounds
-            if (Current < 0) Current = 0;
-            if (Current >= qs.ReadAll().Count)
+            if (QS.Current < 0) QS.Current = 0;
+            if (QS.Current >= aq.ReadAll().Count)
             {
                 EndGame();
                 return Page();
             }
 
-            var q = qs.ReadAll()[Current];
+            var q = aq.ReadAll()[QS.Current];
             var given = (Answer ?? string.Empty).Trim();
             if (string.IsNullOrEmpty(given))
             {
-                Message = "Please enter an answer.";
-                MessageClass = "message-wrong";
-                GameStarted = true;
+                QS.Message = "Please enter an answer.";
+                QS.MessageClass = "message-wrong";
+                QS.GameStarted = true;
                 // ensure no lingering correct-animation flag when user hasn't answered
-                ShowCorrectAnimation = false;
+                QS.ShowCorrectAnimation = false;
                 return Page();
             }
 
             if (string.Equals(given, q.Question ?? string.Empty, StringComparison.OrdinalIgnoreCase))
             {
-                CorrectCount++;
-                Message = "Correct! Moving to next question.";
-                MessageClass = "message-correct";
+                QS.CorrectCount++;
+                QS.Message = "Correct! Moving to next question.";
+                QS.MessageClass = "message-correct";
                 // show short animation between questions
-                ShowCorrectAnimation = true;
-                Current++;
+                QS.ShowCorrectAnimation = true;
+                QS.Current++;
                     // clear the answer for the next question and remove any ModelState entry so the tag helper
                     // renders the updated empty value (ModelState values take precedence over the property)
                     Answer = string.Empty;
                     ModelState.Remove(nameof(Answer));
-                Lives = 3;
-                ShowEnglishHint = false;
-                ShowSentenceHint = false;
+                QS.Lives = 3;
+                QS.ShowEnglishHint = false;
+                QS.ShowSentenceHint = false;
             }
             else
             {
-                Lives--;
-                if (Lives <= 0)
+                QS.Lives--;
+                if (QS.Lives <= 0)
                 {
-                    Message = $"No lives left. The answer was {q.Question}! Moving to next question.";
-                    MessageClass = "message-wrong";
-                    Current++;
+                    QS.Message = $"No lives left. The answer was {q.Question}! Moving to next question.";
+                    QS.MessageClass = "message-wrong";
+                    QS.Current++;
                     // clear the answer when advancing after losing all lives and remove ModelState entry
                     Answer = string.Empty;
                     ModelState.Remove(nameof(Answer));
-                    Lives = 3;
-                    ShowEnglishHint = false;
-                    ShowSentenceHint = false;
+                    QS.Lives = 3;
+                    QS.ShowEnglishHint = false;
+                    QS.ShowSentenceHint = false;
                     // ensure no animation when advancing due to losing lives
-                    ShowCorrectAnimation = false;
+                    QS.ShowCorrectAnimation = false;
                 }
                 else
                 {
-                    Message = $"Wrong. {Lives} lives remaining.";
-                    MessageClass = "message-wrong";
+                    QS.Message = $"Wrong. {QS.Lives} lives remaining.";
+                    QS.MessageClass = "message-wrong";
                     // don't show correct animation on wrong answer
-                    ShowCorrectAnimation = false;
+                    QS.ShowCorrectAnimation = false;
                 }
             }
 
-            if (Current >= qs.ReadAll().Count)
+            if (QS.Current >= aq.ReadAll().Count)
             {
                 EndGame();
             }
 
-            GameStarted = !GameEnded;
+            QS.GameStarted = !QS.GameEnded;
 
             // Persist updated state so the next POST can reload the same questions
-            if (!GameEnded)
+            if (!QS.GameEnded)
             {
                 SaveStateToTemp();
             }
@@ -187,10 +167,10 @@ namespace Vocable_web.Pages
             // reload state so page can render helper text (if needed)
             LoadStateFromTemp();
 
-            ShowEnglishHint = true;
-            GameStarted = true;
+            QS.ShowEnglishHint = true;
+            QS.GameStarted = true;
             // ensure animation flag is cleared when revealing hints (only answers should trigger it)
-            ShowCorrectAnimation = false;
+            QS.ShowCorrectAnimation = false;
             // persist hint state
             SaveStateToTemp();
             return Page();
@@ -201,10 +181,10 @@ namespace Vocable_web.Pages
             // reload state so page can render helper text (if needed)
             LoadStateFromTemp();
 
-            ShowSentenceHint = true;
-            GameStarted = true;
+            QS.ShowSentenceHint = true;
+            QS.GameStarted = true;
             // ensure animation flag is cleared when revealing hints (only answers should trigger it)
-            ShowCorrectAnimation = false;
+            QS.ShowCorrectAnimation = false;
             // persist hint state
             SaveStateToTemp();
             return Page();
@@ -219,12 +199,12 @@ namespace Vocable_web.Pages
 
         private void EndGame()
         {
-            GameEnded = true;
-            GameStarted = false;
+            QS.GameEnded = true;
+            QS.GameStarted = false;
 
             
 
-            FinalMessage = $"You answered {CorrectCount} of {Questions.ReadAll().Count} correctly.";
+            QS.FinalMessage = $"You answered {QS.CorrectCount} of {Questions.ReadAll().Count} correctly.";
 
             // clear persisted questions when game ends
             TempData.Remove(TempKey);
@@ -235,19 +215,13 @@ namespace Vocable_web.Pages
 
         private void SaveStateToTemp()
         {
-            QuizState state = new QuizState
-            {
-                Questions = Questions?.ReadAll() ?? new List<Adverb_Question>(),
-                CorrectCount = CorrectCount,
-                Current = Current,  
-                Lives = Lives,
-                ShowEnglishHint = ShowEnglishHint,
-                ShowSentenceHint = ShowSentenceHint,
-                // preserve animation flag briefly so view can show animation then client-side script will revert
-                ShowCorrectAnimation = ShowCorrectAnimation
-            };
+           
+            QS.Questions = Questions?.ReadAll() ?? new List<Adverb_Question>();
+            
+             // preserve animation flag briefly so view can show animation then client-side script will revert
+            QS.ShowCorrectAnimation = QS.ShowCorrectAnimation;
 
-            var json = JsonSerializer.Serialize(state);
+            var json = JsonSerializer.Serialize(QS);
             TempData[TempKey] = json;
         }
 
@@ -262,14 +236,14 @@ namespace Vocable_web.Pages
             {
                 var state = JsonSerializer.Deserialize<QuizState>(json);
                 if (state == null) return;
-
+                
                 Questions = new GenericRepo<Adverb_Question>(state.Questions ?? new List<Adverb_Question>());
-                Current = state.Current;
-                Lives = state.Lives;
-                CorrectCount = state.CorrectCount;
-                ShowEnglishHint = state.ShowEnglishHint;
-                ShowSentenceHint = state.ShowSentenceHint;
-                ShowCorrectAnimation = state.ShowCorrectAnimation;
+                QS.Current = state.Current;
+                QS.Lives = state.Lives;
+                QS.CorrectCount = state.CorrectCount;
+                QS.ShowEnglishHint = state.ShowEnglishHint;
+                QS.ShowSentenceHint = state.ShowSentenceHint;
+                QS.ShowCorrectAnimation = state.ShowCorrectAnimation;
             }
             catch
             {

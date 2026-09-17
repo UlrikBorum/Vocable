@@ -10,7 +10,7 @@
         <h1 class="headline1">VOCABLE</h1>
 
         @* Start screen *@
-        @if (!Model.GameStarted && !Model.GameEnded)
+        @if (!Model.QS.GameStarted && !Model.QS.GameEnded)
         {
             <div id="start-screen">
                 <p>Press the button to start a 5-question quiz.</p>
@@ -22,35 +22,35 @@
     </center>
 
     @* Game screen *@
-    @if (Model.GameStarted && !Model.GameEnded)
+    @if (Model.QS.GameStarted && !Model.QS.GameEnded)
     {
         var questions = Model.Questions;
         var total = questions.ReadAll().Count;
-        var currentIndex = Math.Min(Math.Max(Model.Current, 0), Math.Max(0, total - 1));
-        var currentQuestion = total > 0 && Model.Current < total ? questions.ReadAll()[Model.Current] : null;
+        var currentIndex = Math.Min(Math.Max(Model.QS.Current, 0), Math.Max(0, total - 1));
+        var currentQuestion = total > 0 && Model.QS.Current < total ? questions.ReadAll()[Model.QS.Current] : null;
 
         <center>
             <div id="game-screen" style="margin-top:1rem;">
                 <div>
-                    <strong>Question @(Model.Current + 1) of @total</strong>
+                    <strong>Question @(Model.QS.Current + 1) of @total</strong>
                 </div>
 
                 <div style="margin-top:1rem;">
                     @if (currentQuestion != null)
                     {
                          var originalSrc = currentQuestion.HelpImagePath ?? string.Empty; 
-                        <img id="questionImage" src="@(Model.ShowCorrectAnimation ? "/images/correct_image.gif" : originalSrc)" data-original-src="@originalSrc" alt="question-image" style="max-width:200px; margin-bottom: 2rem" />
+                        <img id="questionImage" src="@(Model.QS.ShowCorrectAnimation ? "/images/correct_image.gif" : originalSrc)" data-original-src="@originalSrc" alt="question-image" style="max-width:200px; margin-bottom: 2rem" />
                     }
                 </div>
 
                 <div>
                         <form method="post">
                          
-                            <input asp-for="Current" type="hidden" />
-                            <input asp-for="Lives" type="hidden" />
-                            <input asp-for="CorrectCount" type="hidden" />
-                            <input asp-for="ShowEnglishHint" type="hidden" />
-                            <input asp-for="ShowSentenceHint" type="hidden" />
+                            <input asp-for="QS.Current" type="hidden" />
+                            <input asp-for="QS.Lives" type="hidden" />
+                            <input asp-for="QS.CorrectCount" type="hidden" />
+                            <input asp-for="QS.ShowEnglishHint" type="hidden" />
+                            <input asp-for="QS.ShowSentenceHint" type="hidden" />
 
                             @* <label style="">Answer:</label> *@
                             <input asp-for="Answer" id="answerInput" autocomplete="off" />
@@ -65,7 +65,7 @@
                             var maxLives = 3;
                             for (int i = 0; i < maxLives; i++)
                             {
-                                if (i < Model.Lives)
+                                if (i < Model.QS.Lives)
                                 {
                                     <text><span class="life full" aria-hidden="true">♥</span></text>
                                 }
@@ -82,31 +82,31 @@
                     <div>
                         <form method="post" style="display:inline">
                          
-                            <input asp-for="Current" type="hidden" />
-                            <input asp-for="Lives" type="hidden" />
-                            <input asp-for="CorrectCount" type="hidden" />
-                            <input asp-for="ShowEnglishHint" type="hidden" />
-                            <input asp-for="ShowSentenceHint" type="hidden" />
+                            <input asp-for="QS.Current" type="hidden" />
+                            <input asp-for="QS.Lives" type="hidden" />
+                            <input asp-for="QS.CorrectCount" type="hidden" />
+                            <input asp-for="QS.ShowEnglishHint" type="hidden" />
+                            <input asp-for="QS.ShowSentenceHint" type="hidden" />
                             <input asp-for="Answer" type="hidden" />
-                            <button type="submit" asp-page-handler="RevealEnglish" class="hint @(Model.ShowEnglishHint ? "revealed" : "blocked")">@(Model.ShowEnglishHint ? (currentQuestion?.HelpEnglish ?? "") : "English hint")</button>
+                            <button type="submit" asp-page-handler="RevealEnglish" class="hint @(Model.QS.ShowEnglishHint ? "revealed" : "blocked")">@(Model.QS.ShowEnglishHint ? (currentQuestion?.HelpEnglish ?? "") : "English hint")</button>
                         </form>
                     </div>
                     <div style="margin-top:0.5rem;">
                         <form method="post" style="display:inline">
                             
-                            <input asp-for="Current" type="hidden" />
-                            <input asp-for="Lives" type="hidden" />
-                            <input asp-for="CorrectCount" type="hidden" />
-                            <input asp-for="ShowEnglishHint" type="hidden" />
-                            <input asp-for="ShowSentenceHint" type="hidden" />
+                            <input asp-for="QS.Current" type="hidden" />
+                            <input asp-for="QS.Lives" type="hidden" />
+                            <input asp-for="QS.CorrectCount" type="hidden" />
+                            <input asp-for="QS.ShowEnglishHint" type="hidden" />
+                            <input asp-for="QS.ShowSentenceHint" type="hidden" />
                             <input asp-for="Answer" type="hidden" />
-                            <button type="submit" asp-page-handler="RevealSentence" class="hint @(Model.ShowSentenceHint ? "revealed" : "blocked")">@(Model.ShowSentenceHint ? (currentQuestion?.HelpSentence ?? "") : "Example sentence")</button>
+                            <button type="submit" asp-page-handler="RevealSentence" class="hint @(Model.QS.ShowSentenceHint ? "revealed" : "blocked")">@(Model.QS.ShowSentenceHint ? (currentQuestion?.HelpSentence ?? "") : "Example sentence")</button>
                         </form>
                     </div>
                 </div>
                 
                 <div style="margin-top:1rem;">
-                    @if (!string.IsNullOrEmpty(Model.Message)) { <div class="@(Model.MessageClass ?? string.Empty)">@Model.Message</div> }
+                    @if (!string.IsNullOrEmpty(Model.QS.Message)) { <div class="@(Model.QS.MessageClass ?? string.Empty)">@Model.QS.Message</div> }
                     </div>
                 
             </div>
@@ -114,7 +114,7 @@
     }
 
     @* Correct answer animation overlay (plays once for 1.7 second) *@
-    @if (Model.ShowCorrectAnimation)
+    @if (Model.QS.ShowCorrectAnimation)
     {
         <script>
             (function(){
@@ -183,12 +183,12 @@
     </script>
 
     @* End screen *@
-    @if (Model.GameEnded)
+    @if (Model.QS.GameEnded)
     {
         <center>
             <div id="end-screen" style="margin-top:1rem;">
                 <h3>Quiz finished</h3>
-                <div>@Model.FinalMessage</div>
+                <div>@Model.QS.FinalMessage</div>
                 <form method="post">
                     <button type="submit" asp-page-handler="PlayAgain" class="submit">Play Again</button>
                 </form>
@@ -204,11 +204,15 @@
 <button id="explainerBtn" class="explainer-button">?</button>
 
 <div id="explainerOverlay" class="explainer-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="explainer-modal">
+    <center>
+        <div class="explainer-modal">
         <button id="explainerClose" class="explainer-close" aria-label="Close">×</button>
 
         <h3>What is vocable?</h3>
-        <p>I made this game to memerize spanish verbs.</p>
+        <p>I made this game for myself to memerize spanish verbs. I always liked the 'DLEs games, where you do a daily, random puzzle and then can easily forget about after. 
+            But the habit remains. Also, this is a small project to try out drawing small animations, and learn some basic code (this was written in razor-pages with .NET).
+        
+        </p>
 
         <h3>How to play</h3>
         <p>
@@ -216,12 +220,13 @@
             You are given two hints if you can't remember or decipher the animation.<br /> 
             press the english word. If this is the first time seeing this word, there is also a spanish sentence. <br />
             you have three attempts per verb, shown in hearts like this:<br />
-            <center> <span style="color: red"> ♥ ♥ ♥</span></center>
+            <span style="color: red"> ♥ ♥ ♥</span>
         </p>
-            <center><h3>Good luck! / ¡buena suerte!</h3></center>
+            <h3>Good luck! / ¡buena suerte!</h3>
         @* <h3>Headline 3</h3>
         <p>Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla.</p> *@
     </div>
+    </center>
 </div>
 
 <script>
