@@ -53,7 +53,7 @@
                             <input asp-for="QS.ShowSentenceHint" type="hidden" />
 
                             @* <label style="">Answer:</label> *@
-                            <input asp-for="Answer" id="answerInput" autocomplete="off" />
+                            <input asp-for="Answer" id="answerInput" class="answerButton" autocomplete="off" />
                             <button type="submit" asp-page-handler="Submit" class="submit">Submit</button>
                         </form>
                 </div>
@@ -189,6 +189,7 @@
             <div id="end-screen" style="margin-top:1rem;">
                 <h3>Quiz finished</h3>
                 <div>@Model.QS.FinalMessage</div>
+                <h3>High Score: @Model.QS.HighScore / 5000</h3>
                 <form method="post">
                     <button type="submit" asp-page-handler="PlayAgain" class="submit">Play Again</button>
                 </form>

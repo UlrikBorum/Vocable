@@ -47,8 +47,9 @@ namespace Vocable_web.Pages
         // Start using the DI-registered service from Program.cs
         public IActionResult OnPostStart()
         {
-            // Service already populated in Program.cs as singleton
-            var aq = _adverbsService.GetRandomAdverbQuestions(5);
+            // How many questions we would like
+            int nrOfQ = 5;
+            var aq = _adverbsService.GetRandomAdverbQuestions(nrOfQ);
 
             Questions = aq;
             QS.Current = 0;
@@ -57,7 +58,7 @@ namespace Vocable_web.Pages
             QS.ShowEnglishHint = false;
             QS.ShowSentenceHint = false;
             QS.ShowCorrectAnimation = false;
-
+            QS.HighScore = 5000;
             
             QS.GameStarted = true;
             QS.GameEnded = false;
@@ -134,6 +135,7 @@ namespace Vocable_web.Pages
                     QS.Lives = 3;
                     QS.ShowEnglishHint = false;
                     QS.ShowSentenceHint = false;
+                    QS.HighScore -= 200;
                     // ensure no animation when advancing due to losing lives
                     QS.ShowCorrectAnimation = false;
                 }
@@ -141,6 +143,7 @@ namespace Vocable_web.Pages
                 {
                     QS.Message = $"Wrong. {QS.Lives} lives remaining.";
                     QS.MessageClass = "message-wrong";
+                    QS.HighScore -= 200;
                     // don't show correct animation on wrong answer
                     QS.ShowCorrectAnimation = false;
                 }
@@ -168,6 +171,7 @@ namespace Vocable_web.Pages
             LoadStateFromTemp();
 
             QS.ShowEnglishHint = true;
+            QS.HighScore -= 100;
             QS.GameStarted = true;
             // ensure animation flag is cleared when revealing hints (only answers should trigger it)
             QS.ShowCorrectAnimation = false;
@@ -182,6 +186,7 @@ namespace Vocable_web.Pages
             LoadStateFromTemp();
 
             QS.ShowSentenceHint = true;
+            QS.HighScore -= 300;
             QS.GameStarted = true;
             // ensure animation flag is cleared when revealing hints (only answers should trigger it)
             QS.ShowCorrectAnimation = false;
@@ -244,6 +249,7 @@ namespace Vocable_web.Pages
                 QS.ShowEnglishHint = state.ShowEnglishHint;
                 QS.ShowSentenceHint = state.ShowSentenceHint;
                 QS.ShowCorrectAnimation = state.ShowCorrectAnimation;
+                QS.HighScore = state.HighScore;
             }
             catch
             {

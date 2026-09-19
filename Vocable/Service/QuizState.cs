@@ -17,7 +17,8 @@ namespace Vocable.Service
         public string MessageClass { get; set; }
         public bool GameStarted { get; set; }
         public bool GameEnded { get; set; }
-        public string FinalMessage { get; set; } 
+        public string FinalMessage { get; set; }
+        public int HighScore { get; set; }
 
 
         public QuizState()
@@ -34,6 +35,7 @@ namespace Vocable.Service
             GameStarted = false;
             GameEnded = false;
             FinalMessage = string.Empty;
+            HighScore = 0;
             
         }
 

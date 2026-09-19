@@ -152,6 +152,7 @@ body {
 
 
 
+
 /* Explainer modal */
 
 .explainer-button {
@@ -195,12 +196,13 @@ h3 {
 
 
 .explainer-modal {
-    background: rgba(255,165,063, 0.8); /* semi-transparent modal */
+    background: rgba(255,206,153, 0.8); /* semi-transparent modal */
     backdrop-filter: blur(5px);
     max-width: 640px;
     width: 100%;
-    max-height: 520px;
-    height: 100%;
+    height: 560px;
+    max-height: 580px;
+   
     padding: 1rem 1.25rem;
     border-radius: 8px;
     position: relative;
@@ -230,6 +232,12 @@ h3 {
     margin-top: 0;
     margin-bottom: 0.75rem;
     color: #333;
+}
+
+/* Remove inner shadow on the answer input/control */
+#answerInput, .answerButton, input.answerButton {
+    background: #ffce99;
+    border: none;
 }
 
 /* Correct answer animation overlay */
