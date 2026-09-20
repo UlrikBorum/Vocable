@@ -35,11 +35,11 @@
                     <strong>Question @(Model.QS.Current + 1) of @total</strong>
                 </div>
 
-                <div style="margin-top:1rem;">
+                <div style="margin-top:1rem; height:300px;">
                     @if (currentQuestion != null)
                     {
                          var originalSrc = currentQuestion.HelpImagePath ?? string.Empty; 
-                        <img id="questionImage" src="@(Model.QS.ShowCorrectAnimation ? "/images/correct_image.gif" : originalSrc)" data-original-src="@originalSrc" alt="question-image" style="max-width:200px; margin-bottom: 2rem" />
+                        <img id="questionImage" src="@(Model.QS.ShowCorrectAnimation ? "/images/correct_image.gif" : originalSrc)" data-original-src="@originalSrc" alt="question-image" style="max-height:300px; margin-bottom: 2rem" />
                     }
                 </div>
 
